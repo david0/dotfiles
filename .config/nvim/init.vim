@@ -15,7 +15,6 @@ set guitablabel=%t " Show only filename as tab name
 colorscheme gruvbox
 syntax on
 
-
 set spelllang=de,en
 set clipboard=unnamed
 set title
@@ -54,6 +53,8 @@ set backupskip=/tmp/*,/private/tmp/*
 inoremap <C-Space> <C-x><C-o>
 set completeopt=noinsert,menuone
 autocmd FileType * set omnifunc=v:lua.vim.lsp.omnifunc completeopt=noinsert,menuone
+" Fix incorrectly underlined red blocks in hover https://www.reddit.com/r/neovim/comments/jmuxm0/help_seeing_red_blocks_in_hover_definitions/
+hi markdownError guifg=None guibg=None
 
 highlight LspDiagnosticsDefaultWarning ctermfg=238
 highlight LspDiagnosticsDefaultHint ctermfg=238
@@ -77,8 +78,7 @@ lua << EOF
     vim.fn.nvim_buf_set_keymap(0, 'n', 'ga','<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   end
 
-
-  for _, server in ipairs({'bashls', 'jdtls', 'rls'}) do
+  for _, server in ipairs({'bashls', 'tsserver', 'jdtls', 'rls', 'solargraph'}) do
     require'lspconfig'[server].setup {
       on_attach = custom_lsp_attach
     }
